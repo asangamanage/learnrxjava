@@ -94,7 +94,7 @@ public class ObservableSolutions extends ObservableExercises {
      */
     public Observable<JSON> exerciseMovie(Observable<Movies> movies) {
         return movies.flatMap(ml -> {
-            return ml.videos.<JSON> flatMap(v -> {
+            return ml.videos.flatMap(v -> {
                 return v.boxarts.reduce((max, box) -> {
                     int maxSize = max.height * max.width;
                     int boxSize = box.height * box.width;

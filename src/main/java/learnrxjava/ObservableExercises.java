@@ -1,18 +1,20 @@
 package learnrxjava;
 
 import learnrxjava.types.JSON;
+import learnrxjava.types.Movie;
 import learnrxjava.types.Movies;
 import rx.Observable;
+import rx.functions.Action1;
 
 public class ObservableExercises {
 
     /**
      * Return an Observable that emits a single value "Hello World!"
-     * 
+     *
      * @return "Hello World!"
      */
     public Observable<String> exerciseHello() {
-        return Observable.error(new RuntimeException("Not Implemented"));
+        return Observable.just("Hello World!");
     }
 
     /**
@@ -21,7 +23,7 @@ public class ObservableExercises {
      * @param "Hello Name!"
      */
     public Observable<String> exerciseMap(Observable<String> hello) {
-        return Observable.error(new RuntimeException("Not Implemented"));
+        return hello.map(t -> t + " Asanga");
     }
 
     /**
@@ -32,63 +34,71 @@ public class ObservableExercises {
      * 6-Even
      */
     public Observable<String> exerciseFilterMap(Observable<Integer> nums) {
-        return Observable.error(new RuntimeException("Not Implemented"));
+        return nums.filter(num -> num % 2 == 0).map(num -> num + "-Even");
     }
 
     /**
      * Flatten out all video in the stream of Movies into a stream of videoIDs
-     * 
+     *
      * @param movieLists
      * @return Observable of Integers of Movies.videos.id
      */
     public Observable<Integer> exerciseConcatMap(Observable<Movies> movies) {
-        return Observable.error(new RuntimeException("Not Implemented"));
+        return movies.flatMap( t -> t.videos).map(v -> v.id);
     }
 
     /**
      * Flatten out all video in the stream of Movies into a stream of videoIDs
-     * 
+     *
      * Use flatMap this time instead of concatMap. In Observable streams
      * it is almost always flatMap that is wanted, not concatMap as flatMap
      * uses merge instead of concat and allows multiple concurrent streams
      * whereas concat only does one at a time.
-     * 
+     *
      * We'll see more about this later when we add concurrency.
-     * 
+     *
      * @param movieLists
      * @return Observable of Integers of Movies.videos.id
      */
     public Observable<Integer> exerciseFlatMap(Observable<Movies> movies) {
-        return Observable.error(new RuntimeException("Not Implemented"));
+        return movies.flatMap( t -> t.videos).map(v -> v.id);
     }
 
     /**
      * Retrieve the largest number.
-     * 
+     *
      * Use reduce to select the maximum value in a list of numbers.
      */
     public Observable<Integer> exerciseReduce(Observable<Integer> nums) {
-        return Observable.error(new RuntimeException("Not Implemented"));
+        return nums.reduce(Math::max);
     }
 
     /**
      * Retrieve the id, title, and <b>smallest</b> box art url for every video.
-     * 
+     *
      * Now let's try combining reduce() with our other functions to build more complex queries.
-     * 
+     *
      * This is a variation of the problem we solved earlier, where we retrieved the url of the boxart with a
      * width of 150px. This time we'll use reduce() instead of filter() to retrieve the _smallest_ box art in
      * the boxarts list.
-     * 
+     *
      * See Exercise 19 of ComposableListExercises
      */
     public Observable<JSON> exerciseMovie(Observable<Movies> movies) {
-        return Observable.error(new RuntimeException("Not Implemented"));
+        return movies.flatMap(m -> m.videos).flatMap(movie -> movie.boxarts.reduce((ba1, ba2) -> {
+            int ba1Size = ba1.width * ba1.height;
+            int ba2Size = ba2.width * ba2.height;
+            if (ba1Size > ba2Size) {
+                return ba2;
+            } else {
+                return ba1;
+            }
+        }).map(boxArt -> json("id", movie.id, "title", movie.title, "boxart", boxArt.url)));
     }
 
     /**
      * Combine 2 streams into pairs using zip.
-     * 
+     *
      * a -> "one", "two", "red", "blue"
      * b -> "fish", "fish", "fish", "fish"
      * output -> "one fish", "two fish", "red fish", "blue fish"
