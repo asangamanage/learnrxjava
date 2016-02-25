@@ -104,7 +104,7 @@ public class ObservableExercises {
      * output -> "one fish", "two fish", "red fish", "blue fish"
      */
     public Observable<String> exerciseZip(Observable<String> a, Observable<String> b) {
-        return Observable.error(new RuntimeException("Not Implemented"));
+        return a.zipWith(b,(x,y) -> x + " " + y);
     }
 
     /**
@@ -112,7 +112,7 @@ public class ObservableExercises {
      * and replace it with "default-value".
      */
     public Observable<String> handleError(Observable<String> data) {
-        return Observable.error(new RuntimeException("Not Implemented"));
+        return data.onErrorResumeNext(Observable.just("default-value"));
     }
 
     /**
@@ -120,7 +120,7 @@ public class ObservableExercises {
      * with retry capability.
      */
     public Observable<String> retry(Observable<String> data) {
-        return Observable.error(new RuntimeException("Not Implemented"));
+       return data.retry();
     }
 
     // This function can be used to build JSON objects within an expression
