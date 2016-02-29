@@ -296,9 +296,11 @@ public class ComposableListExercises<T> extends ArrayList<T> implements Composab
         // ------------   INSERT CODE HERE!  -----------------------------------
         // Use two nested forEach loops to flatten the movieLists into a list of
         // video ids.
+
+        return movieLists.concatMap(movieList -> movieList.videos).map(video -> video.id);
         // ------------   INSERT CODE HERE!  -----------------------------------
         //return allVideoIdsInMovieLists;
-        throw new UnsupportedOperationException("Not implemented yet.");
+//        throw new UnsupportedOperationException("Not implemented yet.");
     }
     
     /*
@@ -327,19 +329,23 @@ public class ComposableListExercises<T> extends ArrayList<T> implements Composab
     public <R> ComposableList<R> concatMap(
         Function<T, ComposableList<R>> projectionFunctionThatReturnsList) {
         ComposableListExercises<R> results = new ComposableListExercises<R>();
-        for (T itemInList : this) {
-            // ------------ INSERT CODE HERE! ----------------------------
-            // Apply the projection function to each item in the list.
-            // This will create _another_ list. Then loop through each
-            // inner list and add each item to the results list.
-            // Note that you can apply a projectionFunction to a value like this:
-            // projectionFunctionThatReturnsList.apply(5)
-            // ------------ INSERT CODE HERE! ----------------------------
-
-        }
+        map(projectionFunctionThatReturnsList).forEach(itemList -> {
+            itemList.forEach(item -> results.add(item));
+        });
+//        for (T itemInList : this) {
+//            // ------------ INSERT CODE HERE! ----------------------------
+//            // Apply the projection function to each item in the list.
+//            // This will create _another_ list. Then loop through each
+//            // inner list and add each item to the results list.
+//            // Note that you can apply a projectionFunction to a value like this:
+//            // projectionFunctionThatReturnsList.apply(5)
+//            // ------------ INSERT CODE HERE! ----------------------------
+//
+//            projectionFunctionThatReturnsList.apply(itemInList).forEach(item -> results.add(item));
+//        }
         
-        //return results;
-        throw new UnsupportedOperationException("Not implemented yet.");
+        return results;
+//        throw new UnsupportedOperationException("Not implemented yet.");
     }
     
     /*
