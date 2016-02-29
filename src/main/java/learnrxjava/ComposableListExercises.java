@@ -121,6 +121,8 @@ public class ComposableListExercises<T> extends ArrayList<T> implements Composab
     public <R> ComposableList<R> map(Function<T, R> projectionFunction) {
         ComposableListExercises<R> results = new ComposableListExercises<R>();
         this.forEach(itemInList -> {
+
+            results.add(projectionFunction.apply(itemInList));
             // ------------ INSERT CODE HERE! ----------------------------
             // Apply the projectionFunction to each item in the list and add
             // each result to the results list.
@@ -130,8 +132,8 @@ public class ComposableListExercises<T> extends ArrayList<T> implements Composab
             
         });
         
-        //return results;
-        throw new UnsupportedOperationException("Not implemented yet.");
+        return results;
+//        throw new UnsupportedOperationException("Not implemented yet.");
     }
     
     /*
@@ -142,14 +144,11 @@ public class ComposableListExercises<T> extends ArrayList<T> implements Composab
     */
     public static ComposableList<JSON> exercise5() {
         ComposableListExercises<Video> newReleases = ComposableListExercises.of(
-            new Video(70111470, "Die Hard", 4.0),
-            new Video(654356453, "Bad Boys", 5.0),
-            new Video(65432445, "The Chamber", 4.0),
-            new Video(675465, "Fracture", 5.0));
-         
-        // complete this expression 
-        // return newReleases.map(video -> 
-        throw new UnsupportedOperationException("Not implemented yet.");
+                new Video(70111470, "Die Hard", 4.0),
+                new Video(654356453, "Bad Boys", 5.0),
+                new Video(65432445, "The Chamber", 4.0),
+                new Video(675465, "Fracture", 5.0));
+        return newReleases.map(v -> json("id", v.id, "title", v.title));
     }
 
     /*
@@ -187,13 +186,13 @@ public class ComposableListExercises<T> extends ArrayList<T> implements Composab
         ComposableListExercises<Video> highRatedVideos = new ComposableListExercises<Video>();
 
         newReleases.forEach(video -> {
-            // Insert code here that adds a video to the highRatedVideos list
-            // if it has a rating of 5.0.
-
+            if (video.rating == 5) {
+                highRatedVideos.add(video);
+            }
         });
         
-        // return highRatedVideos;
-        throw new UnsupportedOperationException("Not implemented yet.");        
+         return highRatedVideos;
+//        throw new UnsupportedOperationException("Not implemented yet.");
     }
     
     /*
@@ -215,17 +214,14 @@ public class ComposableListExercises<T> extends ArrayList<T> implements Composab
     public ComposableList<T> filter(Predicate<T> predicateFunction) {
         ComposableListExercises<T> results = new ComposableListExercises<T>();
         this.forEach(itemInList -> {
-            // ------------ INSERT CODE HERE! ----------------------------
-            // Apply the predicateFunction to each item in the list. If the
-            // result is true, add the result to the results list.
-            // Note: you can apply the predicateFunction to a value like this:
-            // predicateFunction.test(5)
-            // ------------ INSERT CODE HERE! ----------------------------
+            if(predicateFunction.test(itemInList)){
+                results.add(itemInList);
+            }
 
         });
 
-        // return results;
-        throw new UnsupportedOperationException("Not implemented yet.");
+         return results;
+//        throw new UnsupportedOperationException("Not implemented yet.");
     }
 
     /*
@@ -263,10 +259,11 @@ public class ComposableListExercises<T> extends ArrayList<T> implements Composab
         // ------------ INSERT CODE HERE! -----------------------------------
         // Chain the filter and map functions to select the id of all videos
         // with a rating of 5.0.
+        return newReleases.filter(v -> (v.rating == 5)).map(v -> v.id);
         // ------------ INSERT CODE HERE! -----------------------------------
         //return newReleases // Complete this expression
 
-        throw new UnsupportedOperationException("Not implemented yet.");
+//        throw new UnsupportedOperationException("Not implemented yet.");
     }
 
     /*
