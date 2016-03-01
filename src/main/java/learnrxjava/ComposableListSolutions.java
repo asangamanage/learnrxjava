@@ -788,21 +788,15 @@ public class ComposableListSolutions<T> extends ArrayList<T> implements Composab
 
         // Uncomment the code below and finish the expression.
         return movieLists.
-            concatMap(ml -> {
-                return ml.videos.<JSON>concatMap(v -> {
-                    return v.boxarts.reduce((max, box) -> {
-                        int maxSize = max.height * max.width;
-                        int boxSize = box.height * box.width;
-                        if(boxSize < maxSize) {
-                            return box;
-                        } else {
-                            return max;
-                        }
-                    }).map(maxBoxart -> {
-                        return json("id", v.id, "title", v.title, "boxart", maxBoxart.url);
-                    });
-                });
-            });
+            concatMap(ml -> ml.videos.<JSON>concatMap(v -> v.boxarts.reduce((max, box) -> {
+                int maxSize = max.height * max.width;
+                int boxSize = box.height * box.width;
+                if(boxSize < maxSize) {
+                    return box;
+                } else {
+                    return max;
+                }
+            }).map(maxBoxart -> json("id", v.id, "title", v.title, "boxart", maxBoxart.url))));
     }
 
     /*
